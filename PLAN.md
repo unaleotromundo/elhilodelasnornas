@@ -1,28 +1,25 @@
-# Plan de juego: Legado del Galope
+# Game Plan: El Hilo de las Nornas — La prueba de Nauthiz
 
-## Riesgos aislados
+## Risk Tasks
 
-### 1. Cámara de persecución y travesía lateral
+### 1. Control y combate desde cámara isométrica
+- **Why isolated:** El prototipo anterior usa una cámara de persecución y movimiento automático. La nueva escena necesita que movimiento, objetivo y esquiva respondan correctamente en pantalla 3/4 tanto con teclado como con controles táctiles.
+- **Approach:** Usar una cámara fija elevada y un vector semántico de entrada. Ingrid gira hacia el vector de movimiento; las habilidades seleccionan el objetivo vivo más cercano dentro de un radio visible. El desplazamiento nunca depende de la dirección antigua del runner.
+- **Verify:** WASD y el joystick táctil mueven a Ingrid en la dirección esperada respecto a la cámara; la transición quieta → caminar → lanzar → esquivar no presenta saltos de posición; el modo `?demo` ejecuta una rotación de movimiento y habilidades visible.
 
-- **Por qué se aísla:** La cámara debe conservar una silueta legible, admitir cambios laterales y evitar que la velocidad o el encuadre tapen los rastros de memoria.
-- **Enfoque:** Una cámara de seguimiento determinista mira por delante de la montura, interpola únicamente la posición horizontal y usa una distancia constante. El recorrido se limita a un corredor claro en lugar de intentar navegación o colisiones físicas complejas.
-- **Verificar:** Al mantener izquierda/derecha, la montura cruza el camino sin salirse del encuadre; al avanzar, cámara, suelo y objetos conservan profundidad legible sin saltos.
+### 2. Combate con oleadas y jefe de telegráficos claros
+- **Why isolated:** La legibilidad de ataque, daño y ventanas de jefe define si el juego se siente como RPG de acción o como una escena decorativa.
+- **Approach:** Modelar enemigos con salud, velocidad, estado de marca y enfriamiento de ataque. Ulf alterna tres estados explícitos: acercamiento, anillo de hacha telegrafiado y agotamiento. Crear proyectiles y zonas rúnicas como sistemas ligeros de vida limitada.
+- **Verify:** Los ataques reducen salud sólo en rango; Isa inmoviliza enemigos ligeros; Nauthiz hace daño mayor a enemigos marcados; el anillo de Ulf se muestra antes del golpe y se puede evitar con Paso Velado; al morir el jefe la misión cambia al epílogo.
 
-### 2. Controles semánticos compartidos por teclado y táctil
+## Main Build
 
-- **Por qué se aísla:** Las entradas simultáneas de teclado, botones táctiles y modo demostración pueden dejar un movimiento activo o invertir una acción si no convergen en el mismo estado.
-- **Enfoque:** Todas las fuentes alimentan acciones semánticas (`left`, `right`, `gallop`, `spirit`) en un único estado de entrada que se limpia al finalizar la escena.
-- **Verificar:** Flechas/A-D, botones táctiles y el modo `?demo` mueven la montura en la dirección esperada; soltar un botón detiene su influencia y no aparecen errores en consola.
+Construir una escena única que reúne Playa Negra, almacén, Sala Larga y muelle de Bjørndal. Ingrid controla el combate rúnico; los saqueadores Jarnsmen atacan en oleadas y Ulf aparece como jefe. La interfaz presenta retrato, salud, energía rúnica, barra de cuatro habilidades, objetivo narrativo, botín y apoyo de aliados. La historia visible sigue los capítulos 10–13, con prólogo textual de los capítulos 1–9.
 
-## Construcción principal
-
-La primera vertical slice es una travesía de pampa mítica en tercera persona. El jugador monta, desvía el galope para recoger motas de memoria, evita tres espectros y activa un impulso de vínculo. El progreso se vuelve visible en el HUD y, al completar la ruta, el mundo inicia una nueva vuelta con una crónica distinta.
-
-- **Recursos necesarios:** panorama de pampa como fondo, referencia de jinete y montura para dirección de arte, motas de memoria, emblema de sol/herradura y geometría procedural para la escena y los enemigos.
-- **Verificar:**
-  - El movimiento responde a teclado, botones táctiles y demostración automática.
-  - La barra de pulso baja al golpear espectros; las motas elevan la memoria y la distancia recorrida avanza.
-  - HUD, controles y texto conservan contraste en escritorio y móvil, sin superposiciones críticas.
-  - El arte, la densidad y la cámara respetan la referencia: horizonte bajo, pampa oscura, acentos ámbar y figura pequeña ante el paisaje.
-  - No hay texturas faltantes, elementos de ejemplo ni errores visibles de consola durante la captura.
-  - La ruta puede abrirse instalada como PWA y continuar funcionando como pantalla completa desde el navegador.
+- **Assets needed:** referencia isométrica de Bjørndal, emblema de tres runas, textura de guijarro negro/madera húmeda, silueta de Ingrid, silueta de Ulf y tarjeta de habilidad rúnica.
+- **Verify:**
+  - El movimiento y la respuesta de habilidad coinciden con teclado y controles táctiles.
+  - Las barras de salud y energía se actualizan, los objetivos de misión cambian y no hay solapamiento móvil.
+  - La playa, el almacén, el fiordo, la muralla y los hilos rúnicos son visibles en la primera vista.
+  - El ciclo ola → apoyo → botín → Ulf → Consejo se completa en `?demo` sin interacción.
+  - No hay rutas de recursos rotas, errores de consola ni materiales de reserva evidentes.

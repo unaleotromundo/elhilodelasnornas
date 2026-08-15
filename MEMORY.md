@@ -1,13 +1,9 @@
 # Memoria de producción
 
-## 15 de agosto de 2026
+## Reconstrucción: El Hilo de las Nornas
 
-Se eligió una primera vertical slice de travesía, deliberadamente concentrada en el verbo central: galopar, recoger memoria y evitar espectros. La producción no intenta simular todavía un mundo abierto ni sistemas de combate de gran escala. Esto preserva una experiencia verificable en navegador, adaptable a móvil y extensible con nuevos biomas, encuentros y elecciones narrativas.
+La versión de travesía lineal fue retirada por no corresponder a la novela publicada. El nuevo núcleo se fundamenta en los trece capítulos del manuscrito de `runasvikingas.vercel.app`: Ingrid es la protagonista jugable; Bjørn representa fuerza, Hakon estrategia y Astrid el sostén del clan. El objetivo narrativo de la vertical slice es defender Bjørndal durante el desembarco de Ulf el Sangriento y revelar el Consejo de Tres.
 
-Los fondos y emblemas se sirven desde almacenamiento gestionado; no se guardan archivos pesados dentro del proyecto. Los recursos generados comienzan como placeholders y se actualizan automáticamente en sus URLs reservadas.
+La escena ahora usa cámara isométrica fija, mapas de Playa Negra/Bjørndal, movimiento de cuatro direcciones, cuatro runas activas, oleadas de Jarnsmen, fragmentos de botín, apoyos de aliados y una pelea de jefe con telegráfico. El modo `?demo` activa una versión determinista de movimiento y habilidades para la verificación.
 
-Tras la primera revisión visual se reforzó la lectura de frontera en el runtime: horizonte de capas, sol partido visible, vía enterrada, estación de hierro, mayor presencia de polvo ámbar y HUD tratado como instrumental de expedición. La revisión confirmó conservar la base de tormenta y tierra quemada, evitando que el escenario recaiga en vacío monocromo.
-
-## Verificación de la vertical slice
-
-La ruta `/?demo` presenta el canvas activo, el movimiento automático, el progreso de memoria, las motas, los espectros y el HUD. La composición final exhibe una pampa horizontal con vías en primer plano, sol partido, señal de estación y una montura en el tercio inferior. En desarrollo, el manifiesto responde correctamente y existe un registro de service worker; el modo de visualización actual se informa como navegador hasta que la persona instale la aplicación desde su sistema.
+Los recursos generados para la nueva dirección viven también dentro de `client/public/assets/`, porque el despliegue objetivo es Vercel y no puede depender de rutas exclusivas de Manus. El build y el typecheck se completaron correctamente tras conectar el nuevo arte. La navegación temporal de verificación cargó el HUD y los recursos, aunque el subsistema de navegador quedó inestable antes de producir una captura final; la siguiente revisión visual debe hacerse contra el despliegue de Vercel una vez que el commit llegue a `main`.

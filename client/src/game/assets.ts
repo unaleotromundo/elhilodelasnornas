@@ -1,13 +1,14 @@
 /**
- * Estilo «El Hilo de las Nornas»: frontera de tormenta, hebras luminosas y nudos de destino.
- * Los recursos se resuelven desde el build publicado, sin rutas privadas del entorno de desarrollo.
+ * Dirección «El fiordo como tablero de destino»: recursos portables para el RPG isométrico.
+ * Todas las rutas pasan por BASE_URL para funcionar en Vercel y GitHub Pages.
  */
 const asset = (file: string) => `${import.meta.env.BASE_URL}assets/${file}`;
 
 export const assets = {
-  visualTarget: asset("nornas-threshold.png"),
-  panorama: asset("nornas-threshold.png"),
-  rider: asset("nornas-threshold.png"),
-  motes: asset("nornas-logo.png"),
-  logo: asset("nornas-logo.png"),
+  visualTarget: asset("nornas-isometric-visual-target.png"),
+  logo: asset("nornas-three-council-mark.png"),
+  ingrid: asset("nornas-ingrid-portrait.png"),
+  ulf: asset("nornas-ulf-portrait.png"),
+  arena: asset("nornas-black-beach-arena.png"),
+  runeCards: asset("nornas-rune-ability-cards.png"),
 } as const;

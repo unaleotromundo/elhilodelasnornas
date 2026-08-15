@@ -1,22 +1,13 @@
-# Estructura de ejecución — Legado del Galope
+# Structure: El Hilo de las Nornas — Action RPG Isométrico
 
-## Capas
-
-La aplicación usa React como marco para el canvas y el HUD; Babylon.js posee la escena, las luces, la cámara y el ciclo de renderizado. Las reglas de juego permanecen en `client/src/game/` y no dependen del árbol de React.
+React contiene el marco y el HUD; Babylon contiene mundo, combate y cámara. El contrato se mantiene como `createGameScene(engine, canvas): Promise<GameHandle>` y todos los eventos se emiten como `nornas:*`.
 
 | Módulo | Responsabilidad |
 | --- | --- |
-| `components/GameCanvas.tsx` | Inicializa y destruye el motor una vez; renderiza el HUD y traduce los botones táctiles en acciones semánticas. |
-| `game/scene.ts` | Construye la pampa, la montura, espectros, motas, cámara y actualización de juego. También emite el estado visual hacia el HUD. |
-| `game/assets.ts` | Centraliza los URLs de arte generado, para que los recursos no queden dispersos en las escenas. |
-| `vite.config.ts` | Registra la PWA, el manifiesto y la estrategia de actualización; mantiene los complementos del entorno. |
+| `client/src/components/GameCanvas.tsx` | Inicialización segura, HUD de misión/vida/energía, barra de habilidades, diálogos y entradas táctiles. |
+| `client/src/game/scene.ts` | Escena Babylon, cámara isométrica, bucle, input semántico y distribución del mundo. |
+| `client/src/game/world.ts` | Estado de misión, oleadas, aliados, botín y transición de fases. |
+| `client/src/game/entities.ts` | Ingrid, saqueadores Jarnsmen, Ulf, proyectiles, áreas rúnicas y componentes de salud. |
+| `client/src/game/assets.ts` | Rutas portables a recursos, usando `import.meta.env.BASE_URL`. |
 
-## Contratos
-
-`createGameScene(engine, canvas)` retorna un `GameHandle` con la escena y un método `dispose()`. `GameCanvas` inicia y detiene el bucle de renderizado, y elimina los listeners de DOM por medio del método de limpieza del handle.
-
-El HUD escucha el evento `legado:hud`. Los controles emiten `legado:control` con una acción y un estado de pulsación. El comienzo de la expedición se comunica mediante `legado:started`. Esta frontera mantiene la UI convencional fuera de las reglas y la escena.
-
-## Ayudas de recursos
-
-El horizonte utiliza el panorama generado como capa ambiental. El emblema se muestra como identidad de producto y favicon; el cuadro de destino se usa en el umbral de entrada. El jinete generado es una referencia visual dentro del códice de expedición, mientras que la montura del runtime usa geometría simple para una respuesta inmediata y sin pipeline de modelos 3D.
+La vertical slice no requiere navegación dinámica ni modelos GLB animados. Los personajes son meshes procedurales de silueta amplia, complementados por texturas y arte generado. Las oleadas usan datos simples y los ataques se modelan con estados explícitos, no con física externa.

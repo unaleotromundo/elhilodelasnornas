@@ -1,77 +1,32 @@
-# Direcciones de diseño — Legado del Galope
+# Dirección de diseño — El Hilo de las Nornas
 
-## Tres aproximaciones exploradas
+## Enfoque elegido: El fiordo como tablero de destino
 
-| Tema | Introducción muy breve | Probabilidad |
-| --- | --- | ---: |
-| **El polvo recuerda** | Realismo mágico rioplatense: una pampa imposible, hecha de sal, ceniza y memoria, donde galopar altera el mundo. Busca una épica íntima, táctil y singular. | 0.07 |
-| **Catedral de vapor** | Fantasía industrial vertical entre locomotoras vivientes, herrería litúrgica y ciudades que suben por los acantilados. La energía sería más mecánica y monumental. | 0.03 |
-| **Marea orbital** | Ciencia ficción contemplativa en un planeta de mareas gravitatorias, con viajeros que cruzan océanos suspendidos. Prioriza lo cósmico y melancólico. | 0.09 |
-
-## Dirección elegida: El polvo recuerda
+**El Hilo de las Nornas** es un RPG de acción isométrico ambientado en el fiordo de Bjørndal. El jugador encarna a Ingrid, una völva que no puede resolver la sucesión de Agnar eligiendo entre Björn y Hakon; debe interpretar las runas para revelar que Bjørndal sólo resiste cuando fuerza, astucia y hogar trabajan juntos.
 
 ### Movimiento de diseño
 
-**Realismo mágico gauchesco contemporáneo**, filtrado por pintura mate, grabado criollo y una épica de frontera. No imita una pampa histórica: la reimagina como territorio mítico, con horizontes que respiran, bestias de luz mineral y ruinas ferroviarias que todavía sueñan.
+**Fantasía histórica nórdica en perspectiva isométrica**, con la lectura táctica de un action-RPG contemporáneo y la textura íntima de una saga oral. La playa de guijarro negro, la Sala Larga, el almacén y el muelle no son fondos: son los espacios donde se decide el futuro del clan.
 
 ### Principios rectores
 
-1. **El movimiento es relato.** Cada galope deja huellas, despierta rastros y revela decisiones del pasado.
-2. **Materia con memoria.** Sal, cuero, hierro, tierra húmeda y tela son superficies narrativas, no decorativas.
-3. **Grandeza horizontal.** El horizonte, no el castillo, ordena la composición y la sensación de escala.
-4. **Información diegética.** Brújula, energía, montura y objetivos se perciben como instrumentos del viajero, no como paneles genéricos.
+1. **La runa es acción.** Cada habilidad procede de un significado canónico: Isa detiene, Nauthiz tensiona, Perthro abre una salida y Urd conecta destinos.
+2. **La política aparece en combate.** Björn, Hakon y Astrid son aliados complementarios, visibles y útiles, no texto de ambientación.
+3. **Legibilidad ritual.** Telegráficos, botín, amenazas y objetivos usan luz rúnica controlada para funcionar tanto en móvil como en escritorio.
+4. **El mundo es Bjørndal.** Fiordo, drakkars, muralla de escudos, almacén, bosque ritual y clima de invierno ocupan toda la experiencia.
 
 ### Filosofía de color
 
-La escena comienza en negro azulado de tormenta y tierra quemada para conservar misterio y legibilidad; sobre esa base, el **ámbar cimarrón** funciona como pulso vital: faroles, runas, polvo levantado y estados de interacción. El verde cardo y el hueso gastado aparecen como contrapuntos orgánicos y de archivo. La luz debe sentirse ganada, no decorativa.
+El negro azul de fiordo y el gris mojado son el escenario. El ámbar revela acciones de Ingrid; el plata azul manifiesta el secreto y el hielo; la cochinilla oscura advierte invasión, sangre y peligro. La interfaz evita gradientes genéricos y usa sellos, madera tallada, hierro y lino como materiales visuales.
 
-### Paradigma de composición
+### Composición y firma de marca
 
-La cámara privilegia una **travesía lateral en profundidad**: horizonte largo, capas de lomas y vías enterradas, con el jinete entrando desde el tercio inferior. La interfaz ocupa los bordes como una alforja instrumental; el centro queda deliberadamente libre para leer el terreno y la silueta del caballo.
+La cámara 3/4 alta permite leer la geografía de combate. El símbolo propio es un **nudo de tres hebras alrededor de una runa partida**, que representa a Björn, Hakon y Astrid bajo la lectura de Ingrid. Reaparece en la barra de apoyos, el mapa, los marcadores de misión y el cierre del Consejo de Tres.
 
-### Elementos distintivos
+### Tipografía y voz
 
-- **Estelas de memoria:** el galope enciende breves caligrafías de polvo y pequeñas constelaciones en el suelo.
-- **Marcas de hierro:** ornamentos de herrería, muescas y sellos de estación en marcos, cartas y menús.
-- **Sol partido:** un disco ámbar fragmentado que reaparece en emblemas, hitos del mapa y la retícula ritual.
-
-### Filosofía de interacción
-
-La respuesta debe ser física y escueta: pulsar para la espuela, sostener para cargar el vínculo de la montura, soltar para liberar el impulso. Los actos de exploración se leen como rastreo, no como una lista de tareas. En móvil los controles ocupan las esquinas inferiores con pulgares; en PC, teclado y puntero conservan los mismos verbos.
-
-### Animación
-
-El mundo oscila con una respiración lenta: polvo arrastrado, pasto inclinado, destellos lejanos y nubes en capas. Los golpes de cascos generan pulsos de 120–180 ms y una compresión leve, mientras que las revelaciones de memoria usan barridos de partículas de 450–700 ms. No habrá loops llamativos sin propósito; toda animación debe reforzar velocidad, peso, clima o descubrimiento. Se respetará `prefers-reduced-motion`.
-
-### Sistema tipográfico
-
-**DM Serif Display** aporta solemnidad de crónica y se reserva para nombres, umbrales y acontecimientos. **Barlow Condensed** construye señales, controles y números de ritmo alto, mientras **Source Serif 4** se usa en lecturas de mundo y diálogos. Las mayúsculas espaciadas se limitarán a señalética y microetiquetas.
-
-### Esencia de marca
-
-**Un RPG de travesía para quienes quieren descubrir un continente que recuerda cada huella, a lomos de una montura imposible.** Personalidad: telúrico, indómito, ceremonial.
-
-### Voz de marca
-
-Las frases son concretas, poéticas y con peso material; nunca prometen vagamente una aventura. Los llamados a la acción usan verbos de camino, huella y juramento.
-
-> «El horizonte no termina: te está esperando.»
-
-> «Ensillá la memoria.»
-
-### Wordmark y logotipo
-
-El símbolo será un **sol partido contenido en una herradura abierta**, cuyos rayos forman tres marcas de casco. Funciona sin texto como icono de instalación y marca de carga. El wordmark, cuando aparezca, combinará remates tallados con cortes horizontales que recuerdan rieles ocultos.
+**DM Serif Display** se reserva para acontecimientos, juramentos y voces de las Nornas. **Barlow Condensed** marca habilidades, enfriamientos y objetivos de combate. La voz es concreta, ceremonial y responsable: «El hielo se rompe cuando el clan sostiene el fuego»; «Ulf llega por la playa. El almacén no debe caer».
 
 ### Color de firma
 
-**Ámbar Cimarrón — `#E89935`**. Un naranja mineral, encendido pero terroso, reservado para el pulso del mundo, la acción y el vínculo con la montura.
-
-## Decisiones de estilo
-
-- Priorizar imágenes panorámicas de baja clave; por contraste, la tipografía dentro de zonas sobre imagen será clara y estará protegida por capas oscuras o niebla.
-- Evitar tarjetas uniformemente redondeadas, gradientes violáceos y paneles centrados. La interfaz debe sentirse como equipo de expedición, no como un tablero SaaS.
-- El prototipo inicial se concentrará en una travesía jugable, no en una promesa vacía de mundo abierto: galopar, esquivar amenazas, reunir memoria y elegir rutas.
-- El primer plano siempre debe mostrar el horizonte de pampa, la silueta de jinete y montura, y una señal narrativa Ámbar Cimarrón —rastro, sol partido o memoria— aun durante la demostración automática.
-- La oscuridad sólo acompaña transiciones. En reposo, el mundo revela tierra, vías, estación, marcas de hierro u otra materia reconocible de frontera.
-- Los elementos de interfaz se construyen como instrumentos de viaje —hierro, cuero, mapas, brújulas y sellos de estación— y dejan el eje central disponible para el terreno.
+**Ámbar de Urd — `#E4A244`**. Es la luz de la acción presente: nunca decoración vacía.

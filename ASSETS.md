@@ -1,23 +1,19 @@
-# Recursos — Legado del Galope
+# Assets — El Hilo de las Nornas: La prueba de Nauthiz
 
-**Dirección de arte:** realismo mágico gauchesco contemporáneo; horizontes bajos, materia de tierra y hierro, tormenta azul oscura y ámbar mineral como pulso vital. Las siluetas deben leerse antes que el detalle.
+**Dirección artística:** action-RPG isométrico de fantasía histórica nórdica, fiordo a la hora azul, guijarro negro y madera húmeda, bruma plateada, fuego ámbar y runas legibles. La cámara es 3/4 elevada; las siluetas conservan contraste en pantalla móvil.
 
-## Fondos
+## Referencias y fondos
 
-| Nombre | Descripción | Tamaño en juego | Recurso |
+| Nombre | Descripción | Tamaño en juego | Archivo/URL |
 | --- | --- | --- | --- |
-| `pampas_panorama` | Pampa de tormenta con sol ámbar partido, estación y vías olvidadas. | 1920×1080, capa a pantalla completa. | `/manus-storage/legado-pampas-panorama_e4f1992f.png` |
-| `visual_target` | Referencia de la travesía y umbral de inicio. | 1920×1080, cubierta del umbral. | `/manus-storage/legado-galope-visual-target_5b7dbe6e.png` |
+| `bjorndal_isometric_target` | Fiordo, Sala Larga, almacén, playa y desembarco Jarnsmen; referencia para toda la escena. | 1920×1080, referencia de composición | `/manus-storage/nornas-isometric-visual-target_e3d4611b.png` |
 
-## Personajes y efectos
+## Recursos previstos
 
-| Nombre | Descripción | Tamaño en juego | Recurso |
+| Nombre | Descripción | Tamaño en juego | Rol |
 | --- | --- | --- | --- |
-| `jinete_montura` | Referencia de un viajero y caballo de perfil tres cuartos. | 320×420 px, códice/overlay. | `/manus-storage/legado-jinete-montura_f95d4729.png` |
-| `motas_memoria` | Motas y glifos de cascos para el vínculo espiritual. | 72×72 px, elementos de HUD y partículas. | `/manus-storage/legado-memoria-motes_cf58ffdc.png` |
-
-## Identidad
-
-| Nombre | Descripción | Tamaño en juego | Recurso |
-| --- | --- | --- | --- |
-| `sol_herradura` | Sol partido dentro de herradura, con tres marcas de casco. | 96×96 px, marca, favicon y carga. | `/manus-storage/legado-logo-sol-herradura_3b4cba51.png` |
+| `ingrid` | Völva de capa oscura y bastón de fresno; silueta clara. | 1.7 m | Jugadora y retrato HUD. |
+| `ulf` | Jarl Jarnsmen con cota negra, yelmo de jabalí y hacha de dos manos. | 2.3 m | Jefe de la vertical slice. |
+| `rune_cards` | Isa, Nauthiz, Perthro y Urd en madera de tejo. | 72×72 px | Barra de habilidades y botín. |
+| `fjord_tile` | Guijarro negro con escarcha y hierba fría, repetible. | Tile de 4 m | Suelo de Playa Negra. |
+| `bjorndal_marks` | Sellos de Uruz, Ansuz y Othala. | 96×96 px | Apoyos de Björn, Hakon y Astrid. |

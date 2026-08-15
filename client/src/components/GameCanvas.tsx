@@ -1,134 +1,51 @@
 /**
- * Estilo «El Hilo de las Nornas»: HUD-bastidor de expedición con tres hebras y centro libre para el horizonte.
- * React funciona como marco y HUD; Babylon ocupa el canvas y posee toda la travesía.
+ * Diseño «El fiordo como tablero de destino»: HUD de RPG táctico, con el campo de batalla libre en el centro.
+ * React enmarca la campaña; Babylon administra todas las reglas de combate y escena.
  */
 import { useEffect, useRef, useState } from "react";
 import { Engine } from "@babylonjs/core/Engines/engine";
-import { createGameScene, type GameHandle } from "@/game/scene";
+import { createGameScene, type GameHandle, type HudState } from "@/game/scene";
 import { assets } from "@/game/assets";
 
-type HudState = { pulse: number; bond: number; memory: number; distance: number; chapter: number; message: string };
-const emptyHud: HudState = { pulse: 3, bond: 62, memory: 0, distance: 0, chapter: 1, message: "Las tres hebras esperan tu paso." };
-type Action = "left" | "right" | "gallop" | "spirit";
+type Move = "up" | "down" | "left" | "right";
+type Spell = "attack" | "isa" | "nauthiz" | "step";
+const emptyHud: HudState = { hp: 180, energy: 100, shards: 0, phase: 0, enemies: 0, bossHp: 0, bossActive: false, objective: "Comenzá la lectura de Hagalaz", message: "Ingrid escucha el hilo del fiordo.", cooldowns: { attack: 0, isa: 0, nauthiz: 0, step: 0 }, supports: { bjorn: false, hakon: false, astrid: false }, victory: false, gameOver: false };
 
-function sendControl(action: Action, pressed: boolean) {
-  window.dispatchEvent(new CustomEvent("nornas:control", { detail: { action, pressed } }));
-}
+function move(action: Move, pressed: boolean) { window.dispatchEvent(new CustomEvent("nornas:control", { detail: { action, pressed } })); }
+function cast(action: Spell) { window.dispatchEvent(new CustomEvent("nornas:cast", { detail: action })); }
+
+const spells: { key: Spell; number: string; rune: string; name: string; description: string; hue: string }[] = [
+  { key: "attack", number: "1", rune: "ᚢ", name: "Hilo de Urd", description: "Marca", hue: "amber" },
+  { key: "isa", number: "2", rune: "ᛁ", name: "Isa", description: "Hielo", hue: "ice" },
+  { key: "nauthiz", number: "3", rune: "ᚾ", name: "Nauthiz", description: "Necesidad", hue: "amber" },
+  { key: "step", number: "4", rune: "ᛈ", name: "Perthro", description: "Paso", hue: "red" },
+];
 
 export default function GameCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const startedRef = useRef(false);
-  const [hud, setHud] = useState<HudState>(emptyHud);
-  const [expeditionStarted, setExpeditionStarted] = useState(() => new URLSearchParams(window.location.search).has("demo"));
-  const [showCodex, setShowCodex] = useState(false);
-
+  const canvasRef = useRef<HTMLCanvasElement>(null); const mounted = useRef(false);
+  const [hud, setHud] = useState<HudState>(emptyHud); const [started, setStarted] = useState(() => new URLSearchParams(window.location.search).has("demo")); const [open, setOpen] = useState(false);
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas || startedRef.current) return;
-    startedRef.current = true;
-    const engine = new Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true, adaptToDeviceRatio: true });
-    let handle: GameHandle | null = null;
-    let disposed = false;
-    createGameScene(engine, canvas).then((nextHandle) => {
-      if (disposed) { nextHandle.dispose(); return; }
-      handle = nextHandle;
-      engine.runRenderLoop(() => nextHandle.scene.render());
-    });
-    const onResize = () => engine.resize();
-    const onHud = (event: Event) => setHud((event as CustomEvent<HudState>).detail);
-    window.addEventListener("resize", onResize);
-    window.addEventListener("nornas:hud", onHud);
-    return () => {
-      disposed = true;
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("nornas:hud", onHud);
-      handle?.dispose();
-      engine.dispose();
-      startedRef.current = false;
-    };
+    const canvas = canvasRef.current; if (!canvas || mounted.current) return; mounted.current = true;
+    const engine = new Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true, adaptToDeviceRatio: true }); let handle: GameHandle | null = null; let disposed = false;
+    createGameScene(engine, canvas).then((next) => { if (disposed) { next.dispose(); return; } handle = next; engine.runRenderLoop(() => next.scene.render()); });
+    const resize = () => engine.resize(); const update = (event: Event) => setHud((event as CustomEvent<HudState>).detail);
+    window.addEventListener("resize", resize); window.addEventListener("nornas:hud", update);
+    return () => { disposed = true; window.removeEventListener("resize", resize); window.removeEventListener("nornas:hud", update); handle?.dispose(); engine.dispose(); mounted.current = false; };
   }, []);
-
-  const begin = () => {
-    setExpeditionStarted(true);
-    window.dispatchEvent(new Event("nornas:started"));
-  };
-  const pressProps = (action: Action) => ({
-    onPointerDown: () => sendControl(action, true),
-    onPointerUp: () => sendControl(action, false),
-    onPointerCancel: () => sendControl(action, false),
-    onPointerLeave: () => sendControl(action, false),
-  });
-
-  return (
-    <main className="game-shell" aria-label="El Hilo de las Nornas, travesía jugable">
-      <canvas ref={canvasRef} className="game-canvas" style={{ touchAction: "none" }} />
-      <div className="vignette" aria-hidden="true" />
-
-      <header className="expedition-bar">
-        <div className="brand-lockup">
-          <img src={assets.logo} alt="Emblema de las tres hebras de las Nornas" className="brand-mark" />
-          <div>
-            <p className="eyebrow">Telar {String(hud.chapter).padStart(2, "0")}</p>
-            <h1>El Hilo de las Nornas</h1>
-          </div>
-        </div>
-        <button className="codex-trigger" onClick={() => setShowCodex((value) => !value)} aria-expanded={showCodex}>
-          <span>◈</span> Nornas
-        </button>
-      </header>
-
-      <section className="hud-left" aria-label="Estado de la expedición">
-        <div className="meter-label"><span>Pulso</span><span>{hud.pulse}/3</span></div>
-        <div className="pulse-row" aria-label={`${hud.pulse} pulsos restantes`}>
-          {[0, 1, 2].map((index) => <span className={`pulse ${index < hud.pulse ? "is-lit" : ""}`} key={index}>✦</span>)}
-        </div>
-        <div className="meter-label bond-label"><span>Tensión del hilo</span><span>{hud.bond}%</span></div>
-        <div className="bond-track"><span style={{ width: `${hud.bond}%` }} /></div>
-      </section>
-
-      <section className="hud-right" aria-label="Registro del telar">
-        <div><span>Nudos</span><strong>{String(hud.memory).padStart(2, "0")}</strong></div>
-        <div><span>Trama</span><strong>{String(hud.distance).padStart(3, "0")} m</strong></div>
-        <p>◌ Hilo del acto · urdimbre sur</p>
-      </section>
-
-      <aside className="route-whisper"><span>Lectura del telar</span><p>{hud.message}</p></aside>
-
-      {showCodex && (
-        <aside className="codex-panel" aria-label="Lectura de las Nornas">
-          <button onClick={() => setShowCodex(false)} aria-label="Cerrar lectura">×</button>
-          <img src={assets.rider} alt="Viajero a caballo en la pampa" />
-          <p className="eyebrow">Tres voces, un camino</p>
-          <h2>Ningún hilo manda.</h2>
-          <p>Origen guarda lo vivido, Acto brilla bajo tus cascos y Deriva espera el desvío. Recogé nudos, evitá a los cortadores y cruzá antes de que la tormenta cierre la trama.</p>
-          <div className="codex-keys"><span><b>← →</b> cruzar hebra</span><span><b>↑ / W</b> tensar paso</span><span><b>ESPACIO</b> coser nudo</span></div>
-        </aside>
-      )}
-
-      {!expeditionStarted && (
-        <section className="threshold" style={{ backgroundImage: `linear-gradient(90deg, rgba(5,9,20,.94) 0%, rgba(5,9,20,.58) 46%, rgba(5,9,20,.18) 100%), url(${assets.visualTarget})` }}>
-          <div className="fate-threads" aria-hidden="true"><i /><i /><i /><b>✣</b></div>
-          <div className="threshold-copy">
-            <img src={assets.logo} alt="" className="threshold-mark" />
-            <p className="eyebrow">Una travesía de destino tejido</p>
-            <h2>El destino no llega.<br />Se cruza.</h2>
-            <p>Tres Nornas han tendido sus hilos sobre la pampa. Galopá entre los nudos y decidí qué futuro merece permanecer.</p>
-            <button className="start-button" onClick={begin}>Cruzar el primer nudo <span>→</span></button>
-            <small>PC: flechas o A / D · Móvil: controles en pantalla</small>
-          </div>
-        </section>
-      )}
-
-      <div className="touch-controls" aria-label="Controles táctiles">
-        <div className="direction-pad">
-          <button aria-label="Mover hacia la izquierda" {...pressProps("left")}>←</button>
-          <button aria-label="Mover hacia la derecha" {...pressProps("right")}>→</button>
-        </div>
-        <div className="action-pad">
-          <button className="spirit-control" aria-label="Tensar el hilo del acto" {...pressProps("spirit")}>✦<small>Tejer</small></button>
-          <button className="gallop-control" aria-label="Galopar" {...pressProps("gallop")}>⌁<small>Galope</small></button>
-        </div>
-      </div>
-    </main>
-  );
+  const begin = () => { setStarted(true); window.dispatchEvent(new Event("nornas:started")); };
+  const press = (action: Move) => ({ onPointerDown: () => move(action, true), onPointerUp: () => move(action, false), onPointerLeave: () => move(action, false), onPointerCancel: () => move(action, false) });
+  return <main className="rpg-shell" aria-label="El Hilo de las Nornas, RPG de acción isométrico">
+    <canvas ref={canvasRef} className="rpg-canvas" style={{ touchAction: "none" }} /><div className="rpg-vignette" aria-hidden="true" />
+    <header className="rpg-topbar"><div className="title-lockup"><img src={assets.logo} alt="Sello de las Nornas" /><div><p>LA PRUEBA DE NAUTHIZ · ACTO {hud.phase || 1}</p><h1>El Hilo de las Nornas</h1></div></div><button onClick={() => setOpen((value) => !value)} className="codex-button">ᛟ <span>Códice</span></button></header>
+    <section className="player-frame" aria-label="Estado de Ingrid"><img src={assets.ingrid} alt="Ingrid, völva de Bjørndal" /><div className="portrait-rune">ᛜ</div><div className="player-vitals"><div className="character-name"><strong>Ingrid</strong><span>Völva de Bjørndal</span></div><div className="vital-line"><b>VIDA</b><i><em style={{ width: `${Math.max(0, hud.hp / 1.8)}%` }} /></i><span>{hud.hp}</span></div><div className="vital-line energy"><b>SEIÐR</b><i><em style={{ width: `${hud.energy}%` }} /></i><span>{hud.energy}</span></div></div></section>
+    <aside className="quest-panel"><p>JURAMENTO DEL ÞING</p><h2>{hud.objective}</h2><div className="quest-meta"><span>ᛟ Fragmentos {hud.shards}</span><span>ᛉ Saqueadores {hud.enemies}</span></div></aside>
+    {hud.bossActive && <section className="boss-bar"><div><img src={assets.ulf} alt="" /><strong>ULF EL SANGRIENTO</strong><small>Jarl de los Jarnsmen</small></div><i><em style={{ width: `${Math.max(0, hud.bossHp / 4.1)}%` }} /></i><span>{hud.bossHp} / 410</span></section>}
+    <aside className="rune-whisper"><span>LECTURA DE INGRID</span><p>{hud.message}</p></aside>
+    <section className="support-row" aria-label="Apoyos del clan">{(["bjorn", "hakon", "astrid"] as const).map((support) => <div key={support} className={hud.supports[support] ? "support unlocked" : "support"}><b>{support === "bjorn" ? "ᚢ" : support === "hakon" ? "ᚨ" : "ᛟ"}</b><span>{support === "bjorn" ? "Puño de Björn" : support === "hakon" ? "Ojo de Hakon" : "Corazón de Astrid"}</span></div>)}</section>
+    <section className="spellbar" aria-label="Habilidades de Ingrid">{spells.map((spell) => <button key={spell.key} className={`spell ${spell.hue} ${hud.cooldowns[spell.key] > 0 ? "cooling" : ""}`} onClick={() => cast(spell.key)}><span className="spell-key">{spell.number}</span><b>{spell.rune}</b><strong>{spell.name}</strong><small>{hud.cooldowns[spell.key] > 0 ? `${hud.cooldowns[spell.key].toFixed(1)} s` : spell.description}</small></button>)}</section>
+    {open && <aside className="codex-sheet"><button onClick={() => setOpen(false)} aria-label="Cerrar códice">×</button><img src={assets.ingrid} alt="Ingrid ante el fiordo" /><p>CRÓNICA DE BJØRNDAL</p><h2>Isa. Nauthiz. Perthro.</h2><blockquote>El hielo, la necesidad y el secreto no coronan a un hombre: exigen que el clan aprenda a sostenerse unido.</blockquote><div><b>1 / Espacio</b> Hilo de Urd · <b>2</b> Isa · <b>3</b> Nauthiz · <b>4</b> Perthro</div></aside>}
+    {!started && <section className="rpg-threshold" style={{ backgroundImage: `linear-gradient(90deg, rgba(3,8,18,.96) 0%, rgba(3,8,18,.65) 43%, rgba(3,8,18,.16) 100%), url(${assets.visualTarget})` }}><div className="threshold-runes"><i>ᛁ</i><i>ᚾ</i><i>ᛈ</i></div><div><img src={assets.logo} alt="" /><p>CAPÍTULOS X–XIII · LA SAGA COBRA VIDA</p><h2>El secreto no<br />es un hombre.</h2><h3>Es un clan que aprende a luchar como uno solo.</h3><button onClick={begin}>Defender Bjørndal <span>→</span></button><small>PC: WASD + 1–4 · Móvil: runas y pad táctil</small></div></section>}
+    {(hud.victory || hud.gameOver) && <section className="result-screen"><div><p>{hud.victory ? "EL TEJIDO REPARADO" : "HAGALAZ"}</p><h2>{hud.victory ? "El Consejo de Tres se alza." : "La lectura debe comenzar de nuevo."}</h2><span>{hud.victory ? "Björn, Hakon y Astrid sostienen Bjørndal juntos." : "La necesidad no perdona una lectura incompleta."}</span><button onClick={() => window.location.reload()}>{hud.victory ? "Jugar la próxima saga" : "Volver al fiordo"}</button></div></section>}
+    <div className="touch-move" aria-label="Movimiento táctil"><button {...press("up")}>▲</button><button {...press("left")}>◀</button><button {...press("down")}>▼</button><button {...press("right")}>▶</button></div><div className="touch-spells">{spells.map((spell) => <button key={spell.key} onClick={() => cast(spell.key)} className={spell.hue}>{spell.rune}</button>)}</div>
+  </main>;
 }
