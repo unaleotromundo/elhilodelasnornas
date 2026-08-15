@@ -1,6 +1,6 @@
 /**
- * Estilo «El polvo recuerda»: una pampa horizontal de tormenta, hierro y ámbar cimarrón.
- * La escena usa siluetas claras y materia procedimental para conservar legibilidad a velocidad de galope.
+ * Estilo «El Hilo de las Nornas»: una pampa-telar de tormenta, hierro y tres hebras de destino.
+ * La escena usa siluetas claras, nudos de luz y materia procedimental para conservar legibilidad a velocidad de galope.
  */
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { Scene } from "@babylonjs/core/scene";
@@ -32,6 +32,8 @@ type HudState = {
 const AMBER = new Color3(0.91, 0.47, 0.12);
 const STORM = new Color3(0.045, 0.07, 0.13);
 const EARTH = new Color3(0.22, 0.12, 0.07);
+const MOON_THREAD = new Color3(0.22, 0.42, 0.78);
+const COCHINEAL_THREAD = new Color3(0.58, 0.09, 0.13);
 
 function makeMaterial(scene: Scene, name: string, color: Color3, emissive?: Color3) {
   const material = new StandardMaterial(name, scene);
@@ -96,7 +98,7 @@ function makeHorse(scene: Scene) {
 }
 
 function emitHud(state: HudState) {
-  window.dispatchEvent(new CustomEvent("legado:hud", { detail: state }));
+  window.dispatchEvent(new CustomEvent("nornas:hud", { detail: state }));
 }
 
 export async function createGameScene(engine: Engine, canvas: HTMLCanvasElement): Promise<GameHandle> {
@@ -180,6 +182,27 @@ export async function createGameScene(engine: Engine, canvas: HTMLCanvasElement)
     sleeper.position.set(0, 0.045, z);
     sleeper.material = rails;
   }
+  const threadMaterials = [
+    makeMaterial(scene, "hilo del acto", AMBER.scale(0.5), AMBER.scale(0.8)),
+    makeMaterial(scene, "hilo del origen", MOON_THREAD.scale(0.45), MOON_THREAD.scale(0.65)),
+    makeMaterial(scene, "hilo de la deriva", COCHINEAL_THREAD.scale(0.42), COCHINEAL_THREAD.scale(0.63)),
+  ];
+  const threads = [-2.05, 0, 2.05].map((x, index) => {
+    const thread = MeshBuilder.CreateBox("hebra de destino", { width: 0.095, height: 0.045, depth: 205 }, scene);
+    thread.position.set(x, 0.12, 99);
+    thread.material = threadMaterials[index];
+    return thread;
+  });
+  const knots = [
+    { x: -2.05, z: 18, color: 0 }, { x: 0, z: 34, color: 1 }, { x: 2.05, z: 51, color: 2 },
+    { x: -2.05, z: 74, color: 1 }, { x: 0, z: 91, color: 0 },
+  ].map((node) => {
+    const knot = MeshBuilder.CreateTorus("nudo de destino", { diameter: 0.55, thickness: 0.09, tessellation: 16 }, scene);
+    knot.position.set(node.x, 0.42, node.z);
+    knot.rotation.x = Math.PI / 2;
+    knot.material = threadMaterials[node.color];
+    return knot;
+  });
   for (let i = 0; i < 34; i += 1) {
     const mark = MeshBuilder.CreateBox("cicatriz de ferrocarril", { width: 0.075, height: 0.025, depth: 4.6 }, scene);
     mark.position.set(i % 2 ? -7.9 : 7.9, 0.025, i * 7);
@@ -241,7 +264,7 @@ export async function createGameScene(engine: Engine, canvas: HTMLCanvasElement)
   let chapter = 1;
   let lastHud = 0;
   let recovery = 0;
-  let story = started ? "El camino se inclina hacia la tormenta." : "La pampa aguarda tu juramento.";
+  let story = started ? "El hilo del acto tiembla bajo tus cascos." : "Las tres hebras esperan tu paso.";
 
   const onKey = (event: KeyboardEvent, isDown: boolean) => {
     const map: Record<string, InputAction | undefined> = {
@@ -261,16 +284,18 @@ export async function createGameScene(engine: Engine, canvas: HTMLCanvasElement)
     held[detail.action] = detail.pressed;
     if (detail.pressed) started = true;
   };
-  const onStart = () => { started = true; story = "Los cascos despiertan las rutas enterradas."; };
+  const onStart = () => { started = true; story = "Las Nornas tensan la urdimbre bajo tus cascos."; };
   window.addEventListener("keydown", onDown);
   window.addEventListener("keyup", onUp);
-  window.addEventListener("legado:control", onControl);
-  window.addEventListener("legado:started", onStart);
+  window.addEventListener("nornas:control", onControl);
+  window.addEventListener("nornas:started", onStart);
 
   scene.onBeforeRenderObservable.add(() => {
     const dt = Math.min(scene.getEngine().getDeltaTime() / 1000, 0.05);
     const time = performance.now() / 1000;
     sun.rotation.z = Math.sin(time * 0.08) * 0.02;
+    threads.forEach((thread, index) => { thread.position.y = 0.12 + Math.sin(time * 2.1 + index * 1.7) * 0.025; });
+    knots.forEach((knot, index) => { knot.rotation.z += dt * (index % 2 ? -0.8 : 0.8); knot.position.y = 0.43 + Math.sin(time * 2.4 + index) * 0.08; });
     motes.forEach((mote, index) => {
       if (!mote.taken) {
         mote.mesh.position.y = 1.15 + Math.sin(time * 2.2 + index) * 0.2;
@@ -310,14 +335,14 @@ export async function createGameScene(engine: Engine, canvas: HTMLCanvasElement)
         mote.mesh.setEnabled(false);
         memory += 1;
         bond = Math.min(100, bond + 8);
-        story = "Una huella recuerda tu nombre.";
+        story = "Un nudo se afloja: el futuro todavía puede cambiar.";
       }
     });
     enemies.forEach((enemy) => {
       if (recovery <= 0 && Vector3.Distance(enemy.mesh.position, horse.root.position) < 2.1) {
         pulse = Math.max(0, pulse - 1);
         recovery = 1.25;
-        story = pulse > 0 ? "Un jinete de ceniza quiso cortar la ruta." : "La pampa te devuelve al último juramento.";
+        story = pulse > 0 ? "Un cortador de hilos quiso cerrar la trama." : "La urdimbre te devuelve al último nudo.";
         if (pulse === 0) {
           pulse = 3;
           horse.root.position.z = Math.max(0, horse.root.position.z - 16);
@@ -327,7 +352,7 @@ export async function createGameScene(engine: Engine, canvas: HTMLCanvasElement)
     if (held.spirit) {
       bond = Math.max(0, bond - dt * 11);
       horse.talisman.scaling.setAll(1.65 + Math.sin(time * 18) * 0.2);
-      story = "El vínculo enciende el polvo bajo los cascos.";
+      story = "El hilo del acto arde bajo los cascos.";
     } else {
       bond = Math.min(100, bond + dt * 2.2);
     }
@@ -335,7 +360,7 @@ export async function createGameScene(engine: Engine, canvas: HTMLCanvasElement)
       chapter += 1;
       horse.root.position.z = 0;
       motes.forEach((mote) => { mote.taken = false; mote.mesh.setEnabled(true); });
-      story = "La ruta se repliega. Otro horizonte aprende tu galope.";
+      story = "La trama se repliega. Otra Norna comienza a leer tu paso.";
     }
     if (time - lastHud > 0.12) {
       lastHud = time;
@@ -349,8 +374,8 @@ export async function createGameScene(engine: Engine, canvas: HTMLCanvasElement)
     dispose: () => {
       window.removeEventListener("keydown", onDown);
       window.removeEventListener("keyup", onUp);
-      window.removeEventListener("legado:control", onControl);
-      window.removeEventListener("legado:started", onStart);
+      window.removeEventListener("nornas:control", onControl);
+      window.removeEventListener("nornas:started", onStart);
       backdrop.dispose();
       glow.dispose();
       scene.dispose();

@@ -1,11 +1,13 @@
 /**
- * Estilo «El polvo recuerda»: recursos artísticos de baja clave con ámbar cimarrón.
- * Este módulo centraliza URLs gestionadas para que el mundo conserve una sola fuente visual.
+ * Estilo «El Hilo de las Nornas»: frontera de tormenta, hebras luminosas y nudos de destino.
+ * Los recursos se resuelven desde el build publicado, sin rutas privadas del entorno de desarrollo.
  */
+const asset = (file: string) => `${import.meta.env.BASE_URL}assets/${file}`;
+
 export const assets = {
-  visualTarget: "/manus-storage/legado-galope-visual-target_5b7dbe6e.png",
-  panorama: "/manus-storage/legado-pampas-panorama_e4f1992f.png",
-  rider: "/manus-storage/legado-jinete-montura_f95d4729.png",
-  motes: "/manus-storage/legado-memoria-motes_cf58ffdc.png",
-  logo: "/manus-storage/legado-logo-sol-herradura_3b4cba51.png",
+  visualTarget: asset("nornas-threshold.png"),
+  panorama: asset("nornas-threshold.png"),
+  rider: asset("nornas-threshold.png"),
+  motes: asset("nornas-logo.png"),
+  logo: asset("nornas-logo.png"),
 } as const;

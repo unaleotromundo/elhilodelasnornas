@@ -1,6 +1,6 @@
 /*
- * Estilo «El polvo recuerda»: realismo mágico gauchesco contemporáneo.
- * La interfaz evita tarjetas SaaS; usa bordes de hierro, espacio de horizonte y ámbar cimarrón como señal vital.
+ * Estilo «El Hilo de las Nornas»: realismo mágico de destino tejido.
+ * La interfaz evita tarjetas SaaS; usa bastidores de hierro, espacio de horizonte y tres hebras narrativas como señal vital.
  */
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,500&family=DM+Serif+Display:ital@0;1&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap');
 @import "tailwindcss";
@@ -68,7 +68,7 @@
 .vignette { position: absolute; inset: 0; pointer-events: none; z-index: 1; background: radial-gradient(ellipse at 50% 46%, transparent 36%, rgba(2,5,12,.17) 65%, rgba(1,3,8,.72) 100%); }
 .expedition-bar { position: absolute; z-index: 4; top: 0; left: 0; right: 0; display: flex; align-items: flex-start; justify-content: space-between; padding: clamp(1.1rem, 2vw, 2rem) clamp(1rem, 4vw, 4.8rem); pointer-events: none; }
 .brand-lockup { display: flex; gap: .76rem; align-items: center; filter: drop-shadow(0 4px 12px rgba(0,0,0,.5)); }
-.brand-mark { width: 3.1rem; height: 3.1rem; object-fit: contain; }
+.brand-mark { width: 3.1rem; height: 3.1rem; object-fit: contain; filter: drop-shadow(0 0 8px rgba(232,153,53,.44)); }
 .eyebrow { margin: 0 0 .22rem; font-family: var(--font-signal); text-transform: uppercase; letter-spacing: .17em; font-weight: 600; font-size: .72rem; color: #e89935; }
 .brand-lockup h1 { margin: 0; font-family: var(--font-display); font-size: clamp(1.3rem, 2vw, 1.85rem); line-height: .9; letter-spacing: .01em; font-weight: 400; color: #fff4df; }
 .codex-trigger { pointer-events: auto; display: inline-flex; align-items: center; gap: .42rem; color: #eee3cd; background: rgba(7, 13, 26, .62); border: 1px solid rgba(232,153,53,.6); padding: .5rem .72rem .45rem; font-family: var(--font-signal); font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; transition: background .18s ease-out, color .18s ease-out, transform .16s ease-out; }
@@ -80,6 +80,8 @@
 .pulse-row { display: flex; gap: .42rem; margin: .42rem 0 1.45rem; border-bottom: 1px solid rgba(234,220,190,.3); padding-bottom: .76rem; }
 .pulse { color: rgba(234,220,190,.28); font-size: 1.15rem; transition: color .2s ease-out, transform .2s ease-out; }
 .pulse.is-lit { color: #e89935; transform: translateY(-1px); text-shadow: 0 0 14px rgba(232,153,53,.65); }
+.pulse.is-lit:nth-child(1) { color: #69a9ff; text-shadow: 0 0 14px rgba(105,169,255,.65); }
+.pulse.is-lit:nth-child(3) { color: #d64d51; text-shadow: 0 0 14px rgba(214,77,81,.6); }
 .bond-label { margin-top: .1rem; }
 .bond-track { height: .26rem; margin-top: .42rem; background: rgba(242,234,215,.16); overflow: hidden; }
 .bond-track span { display: block; height: 100%; background: #e89935; box-shadow: 0 0 10px rgba(232,153,53,.7); transition: width .2s ease-out; }
@@ -88,11 +90,16 @@
 .hud-right strong { color: #e89935; font-size: 1.1rem; }
 .hud-right p { margin: .65rem 0 0; color: #e5d7ba; font-family: var(--font-signal); font-size: .75rem; letter-spacing: .08em; }
 .route-whisper { bottom: clamp(5.2rem, 9vh, 7.5rem); left: 50%; width: min(31rem, calc(100vw - 5rem)); transform: translateX(-50%); text-align: center; pointer-events: none; }
-.route-whisper::before, .route-whisper::after { content: ""; position: absolute; top: .42rem; width: 22%; height: 1px; background: linear-gradient(90deg, transparent, rgba(232,153,53,.65)); }.route-whisper::before { left: 0; }.route-whisper::after { right: 0; transform: scaleX(-1); }
+.route-whisper::before, .route-whisper::after { content: ""; position: absolute; top: .42rem; width: 22%; height: 1px; background: linear-gradient(90deg, transparent, rgba(105,169,255,.55), rgba(232,153,53,.7), rgba(214,77,81,.55)); }.route-whisper::before { left: 0; }.route-whisper::after { right: 0; transform: scaleX(-1); }
 .route-whisper span { font-family: var(--font-signal); text-transform: uppercase; letter-spacing: .17em; color: #e89935; font-size: .63rem; }
 .route-whisper p { margin: .32rem 0 0; font-family: var(--font-display); font-size: clamp(1rem, 1.8vw, 1.25rem); font-style: italic; }
-.threshold { position: absolute; z-index: 10; inset: 0; display: flex; align-items: center; padding: clamp(2rem, 8vh, 5.5rem) clamp(1.5rem, 10vw, 10rem); background-size: cover; background-position: center; animation: threshold-in .7s cubic-bezier(.23,1,.32,1) both; }
-.threshold-copy { max-width: 34rem; padding-top: clamp(2.4rem, 6vh, 5rem); }
+.threshold { position: absolute; z-index: 10; inset: 0; display: flex; align-items: center; padding: clamp(2rem, 8vh, 5.5rem) clamp(1.5rem, 10vw, 10rem); background-size: cover; background-position: center; overflow: hidden; animation: threshold-in .7s cubic-bezier(.23,1,.32,1) both; }
+.threshold::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(105,169,255,.08), transparent 32%), radial-gradient(ellipse at 79% 68%, rgba(232,153,53,.16), transparent 21%), linear-gradient(90deg, rgba(5,9,20,.22), transparent 55%); }
+.threshold-copy { position: relative; z-index: 2; max-width: 34rem; padding-top: clamp(2.4rem, 6vh, 5rem); }
+.fate-threads { position: absolute; z-index: 1; right: clamp(2rem, 9vw, 10rem); bottom: -14vh; width: min(42vw, 42rem); height: 58vh; opacity: .86; transform: rotate(-12deg); pointer-events: none; }
+.fate-threads i { position: absolute; bottom: 0; display: block; width: 2px; height: 100%; transform-origin: bottom center; box-shadow: 0 0 12px currentColor; }
+.fate-threads i:nth-child(1) { left: 22%; color: #69a9ff; background: #69a9ff; transform: rotate(-21deg); }.fate-threads i:nth-child(2) { left: 49%; color: #e89935; background: #e89935; transform: rotate(-4deg); }.fate-threads i:nth-child(3) { left: 74%; color: #d64d51; background: #d64d51; transform: rotate(19deg); }
+.fate-threads b { position: absolute; top: 35%; left: 45%; display: grid; place-items: center; width: 4.7rem; height: 4.7rem; color: #e89935; border: 1px solid rgba(232,153,53,.75); border-radius: 50%; font: 2.1rem/1 var(--font-display); text-shadow: 0 0 18px rgba(232,153,53,.9); box-shadow: 0 0 0 10px rgba(5,9,20,.21), inset 0 0 16px rgba(232,153,53,.16); transform: rotate(12deg); }
 .threshold-mark { width: 4.2rem; height: 4.2rem; object-fit: contain; margin-bottom: 1rem; filter: drop-shadow(0 0 18px rgba(232,153,53,.34)); }
 .threshold h2 { max-width: 8.4ch; margin: 0; color: #fff3df; font-family: var(--font-display); font-weight: 400; letter-spacing: -.025em; font-size: clamp(3.1rem, 7.2vw, 6.8rem); line-height: .82; text-shadow: 0 4px 22px rgba(0,0,0,.6); }
 .threshold h2 + p { max-width: 27rem; margin: 1.35rem 0 1.55rem; color: #e9ddc6; font-size: clamp(1rem, 1.4vw, 1.17rem); line-height: 1.45; }
